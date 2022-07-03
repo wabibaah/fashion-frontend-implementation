@@ -95,6 +95,10 @@ Navigation
   justify-content: space-between;
 }
 
+.d-none {
+  display: none;
+}
+
 .nav-list .icons {
   display: none;
 }

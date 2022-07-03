@@ -96,7 +96,7 @@ Navigation
 }
 
 .nav-list .icons {
-  display: none;
+  display: block;
 }
 
 .nav-center .nav-item:not(:last-child) {
