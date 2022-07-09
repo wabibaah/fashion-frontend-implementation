@@ -1,4 +1,5 @@
 from email.policy import default
+from multiprocessing import context
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -442,6 +443,10 @@ def set_default_address(request, id):
   Address.objects.filter(customer=request.user, default=True).update(default=False)
   Address.objects.filter(pk=id, customer=request.user).update(default=True)
   return redirect('addresses')
+
+def contact(request):
+  context = {}
+  return render(request, 'accounts/contact.html', context)
 
 
 
