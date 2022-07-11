@@ -1,3 +1,4 @@
+import random
 from django.shortcuts import render, get_object_or_404, redirect
 from . models import Product, ReviewRating, ProductGallery
 from category.models import Category
@@ -35,6 +36,17 @@ def store(request, category_slug=None):
     paged_products = paginator.get_page(page)
     product_count = products.count()
 
+  try:
+    trending_products = list(Product.objects.all().filter(is_available=True).order_by('id'))
+    if len(trending_products) >= 6:
+      trending_products = random.sample(trending_products, 6)
+    trending_products1 = trending_products[:3]
+    trending_products2 = trending_products[3:]
+
+  except Exception as e:
+    raise e
+
+
     
 
 
@@ -42,6 +54,8 @@ def store(request, category_slug=None):
   context = {
     'products': paged_products,
     'product_count': product_count,
+    'trending_products1': trending_products1,
+    'trending_products2': trending_products2,
   }
 
   return render(request, 'store/store.html', context)
@@ -50,6 +64,11 @@ def store(request, category_slug=None):
 def product_detail(request, category_slug, product_slug):
   try:
     single_product = Product.objects.get(category__slug=category_slug, slug=product_slug)
+
+    related_products = list(Product.objects.filter(category=single_product.category).exclude(id=single_product.id))
+    if len(related_products) >= 4:
+      related_products = random.sample(related_products, 4)
+
     in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request), product=single_product).exists()
     
   except Exception as e:
@@ -87,12 +106,13 @@ def product_detail(request, category_slug, product_slug):
 
   
   context = {
-    'single_product': single_product,
-    'in_cart'       : in_cart,
-    'orderproduct'  : orderproduct,
-    'reviews'       : reviews,
-    'product_gallery': product_gallery,
-    'is_wishlist'    : is_wishlist,
+    'single_product'     : single_product,
+    'in_cart'            : in_cart,
+    'orderproduct'       : orderproduct,
+    'reviews'            : reviews,
+    'product_gallery'    : product_gallery,
+    'is_wishlist'        : is_wishlist,
+    'related_products'   : related_products,
   }
   return render (request, 'store/product_detail.html', context)
 
