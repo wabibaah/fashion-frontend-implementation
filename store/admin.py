@@ -30,7 +30,8 @@ class ProductSpecificationValueInline(admin.TabularInline):
 ### we have to make way for slug auto populate
 class ProductAdmin(admin.ModelAdmin):
   ### this is what will display at the admin side about each product for us to see
-  list_display = ('product_name', 'price', 'stock', 'category', 'modified_date', 'is_available')
+  list_display = ('product_name', 'price', 'stock', 'category', 'modified_date', 'is_available', 'is_featured')
+  list_editable = ('is_featured',)
   ## pre populated field
   prepopulated_fields = {'slug': ('product_name',)}
 

@@ -6,12 +6,15 @@ def home(request):
 
   reviews = 0  ### causing problems but made me learn about database migrations on the server
 
+  is_featured = products.filter(is_featured = True)
+
   for product in products:
     reviews = ReviewRating.objects.filter(product_id=product.id, status=True)
 
   context = {
     'products': products,
     'reviews': reviews,
+    'is_featured': is_featured,
   }
   return render(request, 'home.html', context)
 

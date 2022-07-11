@@ -376,8 +376,8 @@ def add_to_wishlist(request, id):
     product.users_wishlist.add(request.user)
     messages.success(request, "Added " + product.product_name + " to your WishList")
   
-  return redirect(reverse('product_detail', args=[product.category, product.slug] ))
-  # return HttpResponseRedirect(request.META["HTTP_REFERER"])
+  # return redirect(reverse('product_detail', args=[product.category.slug, product.slug] ))
+  return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
 
 @login_required

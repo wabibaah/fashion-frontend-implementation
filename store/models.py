@@ -50,9 +50,13 @@ class Product(models.Model):
   product_type = models.ForeignKey(ProductType, on_delete=models.RESTRICT)
   regular_price = models.DecimalField(verbose_name=("Regular price"), max_digits=6, decimal_places=2)
   discount_price = models.DecimalField(verbose_name=("Discount price"), max_digits=6, decimal_places=2)
+  is_featured    = models.BooleanField(default=False)
 
   def get_url(self):
     return reverse('product_detail', args=[self.category.slug, self.slug])
+
+  def add_to_wish_list(self):
+    return reverse('user_wishlist', args=[self.id])
 
   def __str__(self):
     return self.product_name
