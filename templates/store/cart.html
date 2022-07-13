@@ -56,15 +56,31 @@
                     </td>
                     <td class="shoping__cart__price">${{ cart_item.product.price }}</td>
                     <td class="shoping__cart__quantity">
-                      <div class="quantity">
-                        <div class="pro-qty">
-                          <input type="text" value="1" />
+                      <div class="input-group input-spinner">
+                          <div class="input-group-prepend">
+                            <a
+                              href="{% url 'remove_cart' cart_item.product.id cart_item.id %}"
+                              class="btn btn-light"
+                              type="button"
+                              id="button-minus"
+                              ><i class="fa fa-minus"></i
+                            ></a>
+                          </div>
+                          <input type="text" class="form-control" value="{{ cart_item.quantity }}" readonly />
+                          <div class="input-group-append"><a href="{% url 'add_cart' cart_item.product.id %}" class="btn btn-light" type="submit" id="button-plus">
+                                <i class="fa fa-plus"></i>
+                              </a> 
                         </div>
-                      </div>
                     </td>
                     <td class="shoping__cart__total">${{ cart_item.sub_total }}</td>
                     <td class="shoping__cart__item__close">
-                      <span class="icon_close"></span>
+                      <a
+                    href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}"
+                    onclick="return confirm('Are you sure you want to delete this item?')"
+                    class="btn btn-danger"
+                  >
+                    <i class="fa fa-times"></i> </a
+                  >
                     </td>
                   </tr>
                   {% endfor %}
@@ -97,7 +113,7 @@
               <h5>Cart Total</h5>
               <ul>
                 <li>Total <span>${{ total }}</span></li>
-                <li>Tax <span>${{ tax }}</span></li>
+                <li>Tax (2%) <span>${{ tax }}</span></li>
                 <li>Total <span>${{ grand_total }}</span></li>
               </ul>
               <a href="{% url 'checkout' %}" class="primary-btn">PROCEED TO CHECKOUT</a>

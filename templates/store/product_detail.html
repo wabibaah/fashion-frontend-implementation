@@ -45,24 +45,38 @@
       <div class="col-lg-6 col-md-6">
         <div class="product__details__text">
           <h3>{{single_product.product_name}}</h3>
-          <div class="product__details__rating">
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star-half-o"></i>
-            <span>{{ single_product.countReview }} reviews</span>
+          <div class="rating-star">
+            <span>
+              <i
+                class="fa fa-star{% if single_product.averageReview < 0.5 %}-o{% elif single_product.averageReview >= 0.5 and single_product.averageReview < 1 %}-half-o {% endif %}"
+                aria-hidden="true"
+              ></i>
+
+              <i
+                class="fa fa-star{% if single_product.averageReview < 1.5 %}-o{% elif single_product.averageReview >= 1.5 and single_product.averageReview < 2 %}-half-o {% endif %}"
+                aria-hidden="true"
+              ></i>
+
+              <i
+                class="fa fa-star{% if single_product.averageReview < 2.5 %}-o{% elif single_product.averageReview >= 2.5 and single_product.averageReview < 3 %}-half-o {% endif %}"
+                aria-hidden="true"
+              ></i>
+
+              <i
+                class="fa fa-star{% if single_product.averageReview < 3.5 %}-o{% elif single_product.averageReview >= 3.5 and single_product.averageReview < 4 %}-half-o {% endif %}"
+                aria-hidden="true"
+              ></i>
+
+              <i
+                class="fa fa-star{% if single_product.averageReview < 4.5 %}-o{% elif single_product.averageReview >= 4.5 and single_product.averageReview < 5 %}-half-o {% endif %}"
+                aria-hidden="true"
+              ></i>
+            </span>
+            <span> {{ single_product.countReview }} reviews</span>
           </div>
           <div class="product__details__price">GH$ {{single_product.price}}</div>
           <p>{{single_product.description}}</p>
-          <div class="product__details__quantity">
-            <div class="quantity">
-              <div class="pro-qty">
-                <input type="text" value="1" />
-              </div>
-            </div>
-          </div>
-          <a href="" class="primary-btn">ADD TO CART</a>
+          <a href="{% url 'add_cart' single_product.id %}" class="primary-btn">ADD TO CART</a>
           <a href="{% url 'user_wishlist' single_product.id %}" class="site-btn">{% if is_wishlist %} Remove from Wishlist {% else %} Add to Wishlist {% endif %}</span></a>
           <ul>
             <li><b>Availability</b> <span>
@@ -72,10 +86,6 @@
               <b>Shipping</b> <span>Tema and it's environs  <samp>(free)</samp></span>
             </li>
             <li><b>Weight</b> <span>N / A</span></li>
-            <li>
-              <b>Share on</b>
-              <div id="share"></div>
-            </li>
           </ul>
         </div>
       </div>

@@ -9,7 +9,7 @@
     <div class="row">
       <aside class="col-lg-8">
         <div class="card">
-          <h5 class="card-header">Billing Address</h5>
+          <h5 class="card-header">Billing To</h5>
           <div class="card-body">
             <p class="cart-text mb-0">{{ order.full_name }}</p>
             <p class="cart-text mb-0">{{ order.full_address }}</p>
@@ -18,17 +18,21 @@
             <p class="cart-text mb-0">{{ order.email }}</p>
             <p class="cart-text mb-0">{{ order.phone }}</p>
             {% if order.order_note %}
-            <b>Order Note: </b> {{ order.order_note }} {% endif %}
+            <p><b>Order Note: </b> {{ order.order_note }}</p>
+            {% endif %}
           </div>
         </div>
 
         <div class="card">
-          <h5 class="card-header">Payment Method</h5>
+          <h5 class="card-header">Payment Methods Available</h5>
           <div class="card-body">
-            <p class="cart-text">Paypal</p>
+            <p class="cart-text">Paypal (Test Mode)</p>
           </div>
           <div class="card-body">
-            <p class="cart-text">Cash On Delivery</p>
+            <p class="cart-text">Paystack</p>
+            <small class="text-muted"
+              >This is for Mtn, Vodafone, Airtel Tigo, and Bank Cards</small
+            >
           </div>
         </div>
 
@@ -38,9 +42,9 @@
             <table class="table table-borderless table-shopping-cart">
               <thead class="text-muted">
                 <tr class="small text-uppercase">
-                  <th scope="col">Product</th>
-                  <th scope="col" width="120">Quantity</th>
-                  <th scope="col" width="120">Price</th>
+                  <th scope="col" with="180">Product</th>
+                  <th scope="col" width="180">Quantity</th>
+                  <th scope="col" width="180">Price</th>
                 </tr>
               </thead>
               <tbody>
@@ -49,26 +53,16 @@
                   <td>
                     <figure class="itemside align-items-center">
                       <div class="aside">
-                        <img src="{{cart_item.product.images.url}}" class="img-sm" />
+                        <img
+                          style="max-width: 50px"
+                          src="{{cart_item.product.images.url}}"
+                          class="img-sm"
+                        />
                       </div>
                       <figcaption class="info">
                         <a href="{{ cart_item.product.get_url  }}" class="title text-dark"
                           >{{ cart_item.product.product_name }}</a
                         >
-                        <p class="text-muted small">
-                          {% if cart_item.variations.all %}
-                          <!--  -->
-                          {% for item in cart_item.variations.all %}
-                          <!--  -->
-                          {{ item.variation_category |capfirst }}:
-                          <!--  -->
-                          {{ item.variation_value |capfirst }}
-
-                          <br />
-                          {% endfor %}
-                          <!--  -->
-                          {% endif %}
-                        </p>
                       </figcaption>
                     </figure>
                   </td>
@@ -77,7 +71,7 @@
                   </td>
                   <td>
                     <div class="price-wrap">
-                      <var class="price">${{ cart_item.sub_total }}</var>
+                      <p class="price">${{ cart_item.sub_total }}</p>
                       <small class="text-muted"> ${{ cart_item.product.price }} each </small>
                     </div>
                     <!-- price-wrap .// -->
@@ -116,6 +110,9 @@
           <!-- card-body.// -->
           <div class="my-5 text-center">
             <button class="btn btn-danger" id="paystack-btn">Pay with paystack</button>
+          </div>
+          <div class="my-5 text-center">
+            <button class="btn btn-secondary" id="">Cash On Delivery</button>
           </div>
         </div>
         <!-- card.// -->
