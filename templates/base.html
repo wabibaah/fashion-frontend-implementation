@@ -46,5 +46,13 @@
     <script src="{% static 'js/jssocials.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     <script src="https://www.paypal.com/sdk/js?client-id=Abqrg1wVzFkNars7IZMqC6K7FqbTH6NbsKcqFmNH66Y4F3y7zGkcYkxp9b4lIHB5Spp-Rjb5_naNqUkt&currency=USD"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $("#share").jsSocials({
+          showLabel: false,
+          shares: ["twitter", "facebook", "whatsapp"],
+        });
+      });
+    </script>
   </body>
 </html>
