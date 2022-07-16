@@ -26,13 +26,13 @@
         <div class="card">
           <h5 class="card-header">Payment Methods Available</h5>
           <div class="card-body">
-            <p class="cart-text">Paypal (Test Mode)</p>
-          </div>
-          <div class="card-body">
             <p class="cart-text">Paystack</p>
-            <small class="text-muted"
-              >This is for Mtn, Vodafone, Airtel Tigo, and Bank Cards</small
-            >
+            <small class="text-muted">For Mtn, Vodafone, Airtel Tigo, and Bank Cards</small>
+          </div>
+          <hr />
+          <div class="card-body">
+            <p class="cart-text">Cash On Delivery</p>
+            <small class="text-muted">Pay after the delivery is done</small>
           </div>
         </div>
 
@@ -100,19 +100,22 @@
               <dd class="text-right text-dark b"><strong>${{ grand_total }}</strong></dd>
             </dl>
             <hr />
-            <p class="text-center mb-3">
-              <img src="{% static './images/misc/payments.png' %}" height="26" />
+            <p class="text-center">
+              <img src="{% static 'img/payments.png' %}" height="100" />
             </p>
-            <div id="paypal-button-container">
-              <!-- Paypal button will load -->
-            </div>
+            <!-- <div id="paypal-button-container">
+              
+            </div> -->
           </div>
           <!-- card-body.// -->
-          <div class="my-5 text-center">
-            <button class="btn btn-danger" id="paystack-btn">Pay with paystack</button>
+          <div class="text-center">
+            <p class="text-center mb-3">
+              <small class="text-muted">Mtn, Vodafone, Airtel Tigo, and Bank Cards</small>
+            </p>
+            <button class="btn btn-danger" id="paystack-btn">Online Payment</button>
           </div>
           <div class="my-5 text-center">
-            <button class="btn btn-secondary" id="">Cash On Delivery</button>
+            <button class="btn btn-secondary" id="cash-btn">Cash On Delivery</button>
           </div>
         </div>
         <!-- card.// -->
@@ -149,6 +152,8 @@
   var amount = "{{ grand_total }}";
   var url = "{% url 'payments' %}";
   var paystackUrl = "{% url 'paystack-payment' %}";
+  var cashUrl = "{% url 'cash-payment' %}";
+  var cashRedirect = "{% url 'cash-order-complete' %}";
   var csrftoken = getCookie("csrftoken");
   var orderID = "{{ order.order_number }}";
   var payment_method = "Paypal";
@@ -156,6 +161,7 @@
 
   // / Paystack
   const paystackBtn = document.getElementById("paystack-btn");
+  const cashBtn = document.getElementById("cash-btn");
 
   // Render the PayPal button into #paypal-button-container
   // paypal
@@ -225,7 +231,6 @@
   //   .render("#paypal-button-container");
 
   paystackBtn.addEventListener("click", (e) => {
-    console.log("Paystack button Clicked");
     data = {
       orderID,
     };
@@ -240,7 +245,6 @@
       })
         .then((response) => response.json()) // very very important.
         .then(function (res) {
-          console.log("Data", res);
           if (res["payment_url"]) {
             // redirect the customer
             window.location.href = res["payment_url"];
@@ -253,6 +257,36 @@
         });
     }
     sendPayStackData();
+  });
+
+  cashBtn.addEventListener("click", (e) => {
+    data = {
+      orderID,
+    };
+
+    function cashOnDelivery() {
+      fetch(cashUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrftoken,
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then(function (res) {
+          if (res["payment_url"]) {
+            // redirect the customer
+            window.location.href = cashRedirect;
+          } else {
+            console.log("error");
+          }
+        })
+        .catch((e) => {
+          console.log(error);
+        });
+    }
+    cashOnDelivery();
   });
 </script>
 {% endblock %}

@@ -68,6 +68,101 @@ def paystackPayment(request):
   })
 
 
+def cashPayment(request):
+  data = json.loads(request.body)
+  current_user = request.user
+
+  order = Order.objects.get(user=current_user, is_ordered=False, order_number=data['orderID'])
+  cart_items = CartItem.objects.filter(user=order.user)
+  cart_count = cart_items.count()
+
+  if cart_count <= 0:
+    return redirect('store')
+  
+  payment = Payment(
+    user = request.user,
+    payment_id = order.order_number,
+    payment_method = "Cash On delivery",
+    amount_paid = order.order_total,
+    status = "Not Paid",
+  )
+
+  payment.save()
+
+  order.payment = payment 
+  order.is_ordered = True ### because they have paid //
+  order.save()
+
+  for item in cart_items:
+    orderproduct = OrderProduct()
+    orderproduct.order_id = order.id
+    orderproduct.payment = payment
+    orderproduct.user_id = current_user.id
+    orderproduct.product_id = item.product_id
+    orderproduct.quantity = item.quantity
+    orderproduct.product_price = item.product.price
+    orderproduct.ordered = True ### after i am done i will change it order.ordered field
+    orderproduct.save()
+
+    cart_item = CartItem.objects.get(id=item.id)
+    product_variation = cart_item.variations.all()
+    orderproduct = OrderProduct.objects.get(id=orderproduct.id)   # we are using the id because the orderproduct has saved and therefore we can use the id
+    orderproduct.variations.set(product_variation)
+    orderproduct.save()
+
+    ### reduce the quantity of the sold products
+    # product = Product.objects.get(id=item.product_id)
+    # product.stock -= item.quantity
+    # product.save()
+
+  CartItem.objects.filter(user=current_user).delete()
+
+  request.session['order_number'] = data['orderID']
+
+  return JsonResponse({
+    'payment_url': 'cash-order-complete',
+  })
+
+def cashOrderComplete(request):
+  current_user = request.user
+
+  order_number = ''
+  if 'order_number' in request.session:
+    order_number = request.session['order_number']
+    del request.session['order_number'] 
+
+  try:
+    order = Order.objects.get(is_ordered=True, order_number=order_number)
+    ordered_products = OrderProduct.objects.filter(order_id=order.id)
+    payment = order.payment
+    subtotal = 0
+    for i in ordered_products:
+      subtotal += (i.product_price * i.quantity)
+
+    mail_subject = 'Thank you for your order!'
+    message = render_to_string('orders/order_received_email.html', {
+      'user': current_user,
+      'order': order,
+    })
+
+    to_email = current_user.email
+    send_email = EmailMessage(mail_subject, message, to=[to_email])
+    send_email.send()
+
+    context = {
+      'order': order,
+      'ordered_products': ordered_products,
+      'order_number': order.order_number,
+      'transID': payment.payment_id,
+      'payment': payment,
+      'subtotal': subtotal,
+    }
+
+    return render (request, 'orders/order_complete.html', context)
+  except (OrderProduct.DoesNotExist, Order.DoesNotExist):
+    return redirect('home')
+
+
 @csrf_exempt
 def webhook(request):
   if request.method == "POST":
@@ -138,35 +233,11 @@ def webhook(request):
           product = Product.objects.get(id=item.product_id)
           product.stock -= item.quantity
           product.save()
-          ### i checked and the atx jeans 5 (2 + 2 + 1) was reduced to give me 95 instead of 100
-          ### and assignments will be if the person reverses the products we must re add them back to it
-          ### you can do this and even add more models and wishlists kraa for inside bro
         
         ### clear cart
         CartItem.objects.filter(user=payment_intent.user).delete()
 
-
-        # ### send order received email to customer
-        # mail_subject = 'Thank you for your order on moses-greatkart!'
-        # message = render_to_string('orders/order_received_email.html', {
-        #   'user': payment_intent.user,
-        #   'order': order,
-        # })
-        # ### write a code to store something to proof that email was sent so that users won't lie about it
-        # ### also see how you can make it come in sms format
-        # ### how to do your own mobile money and more with sms and django
-        
-        # to_email = payment_intent.user.email
-        # send_email = EmailMessage(mail_subject, message, to=[to_email,])
-        # send_email.send()
-
-        
-        # data = {
-        #   'order_number': order.order_number,
-        #   'transID': payment.payment_id,
-        # }
-        return HttpResponse(200)
-        
+        return HttpResponse(200)       
   
   return HttpResponseForbidden()
 
@@ -175,11 +246,11 @@ def paymentConfirm(request):
   order_number = ''
   if 'order_number' in request.session:
     order_number = request.session['order_number']
-    # del request.session['order_number'] 
+    del request.session['order_number'] 
   referrer = ''
   if 'referrer' in request.session:
     referrer = request.session['referrer']
-    # del request.session['referrer'] 
+    del request.session['referrer'] 
   
   
   try:
@@ -213,20 +284,11 @@ def paymentConfirm(request):
       'transID': payment.payment_id,
       'payment': payment,
       'subtotal': subtotal,
-      'payment_intent': payment_intent.referrer,
-      'payment_intent_user': payment_intent.user,
-      'payment_intent_order_number': payment_intent.order_number,
     }
     return render(request, 'orders/order_complete.html', context)
     
   except (Payment.DoesNotExist, Order.DoesNotExist):
     return redirect('home')
-  
-
-
-
-
-
 
 
 def payments(request):

@@ -1,3 +1,4 @@
+import random
 from django.shortcuts import render
 from store.models import Product, ReviewRating
 
@@ -11,10 +12,32 @@ def home(request):
   for product in products:
     reviews = ReviewRating.objects.filter(product_id=product.id, status=True)
 
+  trending_products = list(Product.objects.all().filter(is_available=True).order_by('id'))
+  if len(trending_products) >= 6:
+    trending_products = random.sample(trending_products, 6)
+  trending_products1 = trending_products[:3]
+  trending_products2 = trending_products[3:]
+
+  top_rated_products = list(Product.objects.all().filter(is_available=True).order_by('id'))
+  if len(top_rated_products) >= 6:
+    top_rated_products = random.sample(top_rated_products, 6)
+  top_rated_products1 = top_rated_products[:3]
+  top_rated_products2 = top_rated_products[3:]
+
+  latest_products = list(Product.objects.all().filter(is_available=True).order_by('-id'))
+  latest_products1 = latest_products[:3]
+  latest_products2 = latest_products[3:6]
+
   context = {
     'products': products,
     'reviews': reviews,
     'is_featured': is_featured,
+    'trending_products1': trending_products1,
+    'trending_products2': trending_products2,
+    'latest_products1': latest_products1,
+    'latest_products2': latest_products2,
+    'top_rated_products1': top_rated_products1,
+    'top_rated_products2': top_rated_products2,
   }
   return render(request, 'home.html', context)
 
