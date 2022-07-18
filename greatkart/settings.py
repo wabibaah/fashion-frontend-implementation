@@ -93,18 +93,23 @@ AUTH_USER_MODEL = 'accounts.Account'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'da9bsdu9pm613i',                      
+        'USER': 'kwumeeytsagrdu',
+        'PASSWORD': 'c3866e22416d8b4a8dbff37045aae8f212c47b467f7959aab5c8ac6b4380a022',
+        'HOST': 'ec2-3-217-14-181.compute-1.amazonaws.com',
+        'PORT': '5432',
+    }
+}
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite33',
 #     }
 # }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite33',
-    }
-}
 
 
 # Password validation
@@ -172,7 +177,7 @@ PAYSTACK_SECRET = config('PAYSTACK_SECRET')
 PAYSTACK_IPS = ['52.31.139.75', '52.49.173.169', '52.214.14.220']
 
 ## website config
-HOST_URL = 'https://e909-41-66-203-201.eu.ngrok.io'
+HOST_URL = ''
 
 # Configure Django App for Heroku.
 import django_on_heroku
