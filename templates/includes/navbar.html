@@ -36,9 +36,9 @@
         <li><a href="#">Other Regions</a></li>
       </ul> -->
     </div>
-    <div class="header__top__right__auth">
+    <!-- <div class="header__top__right__auth">
       <a href="#"><i class="fa fa-user"></i> Login</a>
-    </div>
+    </div> -->
   </div>
   <nav class="humberger__menu__nav mobile-menu">
     {% url 'home' as home %}
@@ -64,8 +64,8 @@
   </div>
   <div class="humberger__menu__contact">
     <ul>
-      <li><i class="fa fa-envelope"></i> sedem_seanefu_coutour@gmail.com</li>
-      <li>Log in or Sign up to buy from us</li>
+      <li><i class="fa fa-envelope"></i> sedem_seanefu@gmail.com</li>
+      <li>Log in or Sign up to buy from us (0244639729)</li>
     </ul>
   </div>
 </div>
@@ -79,7 +79,7 @@
         <div class="col-lg-6">
           <div class="header__top__left">
             <ul>
-              <li><i class="fa fa-envelope"></i> sedem_seanefu_coutour@gmail.com</li>
+              <li><i class="fa fa-envelope"></i> sedem_seanefu@gmail.com</li>
               <li>Log in or Sign up to buy from us</li>
             </ul>
           </div>
@@ -101,9 +101,9 @@
                 <li><a href="#">Other Regions</a></li>
               </ul> -->
             </div>
-            <div class="header__top__right__auth">
+            <!-- <div class="header__top__right__auth">
               <a href="#"><i class="fa fa-user"></i> Login</a>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -181,7 +181,7 @@
           <div class="hero__search__form">
             <form action="{% url 'search' %}" method="GET">
               <div class="hero__search__categories">
-                Search all categories
+                Search all category
                 <!-- <span class="arrow_carrot-down"></span> -->
               </div>
               <input type="text" placeholder="What do yo u need?" name="keyword" />
@@ -189,13 +189,39 @@
             </form>
           </div>
           <div class="hero__search__phone">
+            {% if user.id is None %}
             <div class="hero__search__phone__icon">
-              <i class="fa fa-phone"></i>
+              <i class="fa fa-user"></i>
             </div>
             <div class="hero__search__phone__text">
-              <h5>+233 244639729</h5>
-              <span>support 24/7 time</span>
+              <p><small class="title text-muted">Welcome guest!</small></p>
+              <small style="background-color: rgb(200, 255, 0)" class="title text-muted"
+                >REGISTER to buy</small
+              >
+              <div>
+                <a href="{% url 'login' %}">Sign in</a> <span class="dark-transp"> | </span>
+                <a href="{% url 'register' %}"> Register</a>
+              </div>
             </div>
+            {% else %}
+            <div class="hero__search__phone__icon">
+              <a href="{% url 'edit_profile' %}"
+                ><img
+                  src="{{ userprofile.profile_picture.url }}"
+                  alt="User Profile Picture"
+                  width="50"
+                  height="50"
+                  style="border-radius: 50%"
+              /></a>
+            </div>
+            <div class="hero__search__phone__text">
+              <small class="title text-muted">Welcome {{ user.first_name }}</small>
+              <div>
+                <a href="{% url 'dashboard' %}">Dashboard</a> <span class="dark-transp"> | </span>
+                <a href="{% url 'logout' %}">Logout</a>
+              </div>
+            </div>
+            {% endif %}
           </div>
         </div>
       </div>

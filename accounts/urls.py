@@ -32,9 +32,6 @@ urlpatterns = [
   path("addresses/delete/<slug:id>/", views.delete_address, name='delete_address'),
   path("addresses/set_default/<slug:id>/", views.set_default_address, name='set_default_address'),
 
-  ### contact me page
-  path('contact/', views.contact, name='contact'),
-
 ]
 
 

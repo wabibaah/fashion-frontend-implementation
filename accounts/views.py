@@ -444,9 +444,6 @@ def set_default_address(request, id):
   Address.objects.filter(pk=id, customer=request.user).update(default=True)
   return redirect('addresses')
 
-def contact(request):
-  context = {}
-  return render(request, 'accounts/contact.html', context)
 
 
 

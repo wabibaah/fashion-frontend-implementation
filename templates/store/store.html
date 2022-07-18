@@ -58,7 +58,7 @@
               <div class="latest-product__slider owl-carousel">
                 <div class="latest-prdouct__slider__item">
                   {% for product in trending_products1 %}
-                  <a href="#" class="latest-product__item">
+                  <a href="{{ product.get_url }}" class="latest-product__item">
                     <div class="latest-product__item__pic">
                       <img src="{{product.images.url}}" alt="" />
                     </div>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="latest-prdouct__slider__item">
                   {% for product in trending_products2 %}
-                  <a href="#" class="latest-product__item">
+                  <a href="{{ product.get_url }}" class="latest-product__item">
                     <div class="latest-product__item__pic">
                       <img src="{{product.images.url}}" alt="" />
                     </div>
