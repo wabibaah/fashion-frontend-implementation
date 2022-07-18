@@ -174,3 +174,6 @@ PAYSTACK_IPS = ['52.31.139.75', '52.49.173.169', '52.214.14.220']
 ## website config
 HOST_URL = 'https://e909-41-66-203-201.eu.ngrok.io'
 
+# Configure Django App for Heroku.
+import django_on_heroku
+django_on_heroku.settings(locals())
