@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
+import django_on_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -95,14 +96,28 @@ AUTH_USER_MODEL = 'accounts.Account'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'da9bsdu9pm613i',                      
-        'USER': 'kwumeeytsagrdu',
-        'PASSWORD': 'c3866e22416d8b4a8dbff37045aae8f212c47b467f7959aab5c8ac6b4380a022',
-        'HOST': 'ec2-3-217-14-181.compute-1.amazonaws.com',
-        'PORT': '5432',
+        'ENGINE': config('ENGINE'),
+        'NAME': config('NAME'),                      
+        'USER': config('USER'),
+        'PASSWORD': config('PASSWORD'),
+        'HOST': config('HOST'),
+        'PORT': config('PORT', cast=int),
     }
 }
+
+
+# CLOUDINARY SETTINGS
+MEDIA_URL = '/moses_seanefu/'
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUD_NAME') ,
+    'API_KEY': config('API_KEY', default=True, cast=int),
+    'API_SECRET': config('API_SECRET') ,
+}
+
 
 # DATABASES = {
 #     'default': {
@@ -180,5 +195,4 @@ PAYSTACK_IPS = ['52.31.139.75', '52.49.173.169', '52.214.14.220']
 HOST_URL = ''
 
 # Configure Django App for Heroku.
-import django_on_heroku
 django_on_heroku.settings(locals())

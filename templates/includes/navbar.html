@@ -205,14 +205,7 @@
             </div>
             {% else %}
             <div class="hero__search__phone__icon">
-              <a href="{% url 'edit_profile' %}"
-                ><img
-                  src="{{ userprofile.profile_picture.url }}"
-                  alt="User Profile Picture"
-                  width="50"
-                  height="50"
-                  style="border-radius: 50%"
-              /></a>
+              <i class="fa fa-user"></i>
             </div>
             <div class="hero__search__phone__text">
               <small class="title text-muted">Welcome {{ user.first_name }}</small>
