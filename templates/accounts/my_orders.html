@@ -1,4 +1,8 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+<!--  -->
+{% block title %} {{order.full_name}}'s orders {% endblock %}
+<!--  -->
+{%block content %}
 <section class="section-content padding-y bg">
   {% include 'includes/alerts.html' %}
   <div class="container">
@@ -26,7 +30,11 @@
                   <tbody>
                     {% for order in orders %}
                     <tr>
-                      <th scope="row"><a href="{% url 'order_detail' order.order_number %}"> {{ order.order_number }} </a></th>
+                      <th scope="row">
+                        <a href="{% url 'order_detail' order.order_number %}">
+                          {{ order.order_number }}
+                        </a>
+                      </th>
                       <td>{{ order.full_name }}</td>
                       <td>{{order.phone}}</td>
                       <td>$ {{order.order_total}}</td>

@@ -1,5 +1,11 @@
 
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %}
+<!--  -->
+{% load static %}
+<!--  -->
+{% block title %} {{single_product.product_name}} | details {% endblock %}
+<!--  -->
+{%block content %}
 <!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
   <div class="container">
