@@ -192,7 +192,7 @@ PAYSTACK_SECRET = config('PAYSTACK_SECRET')
 PAYSTACK_IPS = ['52.31.139.75', '52.49.173.169', '52.214.14.220']
 
 ## website config
-HOST_URL = ''
+HOST_URL = 'https://wabi-fashion-target.herokuapp.com'
 
 # Configure Django App for Heroku.
 django_on_heroku.settings(locals())
